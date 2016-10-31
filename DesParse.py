@@ -3,6 +3,21 @@ import re
 import requests
 import bs4
 
+num2word = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9,
+            "ten": 10}
+
+regex_dict = {"Number": "[A-Z]*[0-9]+[A-Z]*",
+              "Name": "(?<=. )[A-Za-z1-9\- ]+",
+              "Units": "(?<=Units: )[1-9]+",
+              "Description": "(?<=[a-z]\. )[A-Z].+",
+              "Seminar": "(?<=Seminar, )[a-z]+(?= hour)",
+              "Lecture": "(?<=Lecture, )[a-z]+(?= hour)",
+              "Outside study": "(?<=outside study, )[a-z]+(?= hour)",
+              "Laboratory": "(?<=(?:L|l)aboratory, )[a-z]+(?= hour)",
+              "Discussion": "(?<=discussion, )[a-z]+(?= hour)",
+              "Studio": "(?<=Studio, )[a-z]+(?= hour)"
+              }
+
 
 class Parser:
     """
@@ -16,7 +31,7 @@ class Parser:
 
         self.majors = {}
 
-        for lines in text:
+        for line in text:
             name = re.search("(?<=\t)[A-Z][a-z]+"
                              "(( and| of| in| as a| \|| the|, Study of)*"
                              "( |(\/)|-|, )[A-Z][a-z,]+)*"
@@ -24,9 +39,9 @@ class Parser:
                              "( \(Graduate\))*"
                              "( \(pre-16F\))*"
                              "( \(pre-15F\))*"
-                             "(?=\t|  )", lines)
+                             "(?=\t|  )", line)
             abbrev = re.search("(?<=\t)([A-Z -\/&])+(?=(\t| )"
-                               "(AA|DN|EI|EN|GS|HU|IS|LF|LW|MG|MN|MU|NS|PA|PH|PS|SM|SS|TF)\t)", lines)
+                               "(AA|DN|EI|EN|GS|HU|IS|LF|LW|MG|MN|MU|NS|PA|PH|PS|SM|SS|TF)\t)", line)
             if name and abbrev:
                 self.majors.update({name.group(0).lower(): abbrev.group(0)})
 
@@ -34,20 +49,26 @@ class Parser:
                            "mechanical and aerospace engineering": "MECH&AE"})
 
     def convert_symbol(self, string):
-        """Converts & to proper symbol"""
+        """Returns the input string with & converted to %26"""
         for i in range(len(string)):
             if string[i] == "&":
                 return string[0:i] + "%26" + string[i + 1:]
         return string
 
-    def major_abbrev(self, major):
-        """Converts input to major abbreviation"""
+    def major_abbrev(self, major, conv_symbol=True):
+        """Converts input to major abbreviation, returns the result of conversion"""
         output = ""
         if major.upper() in self.majors.values():
-            output = self.convert_symbol(major)
+            if conv_symbol:
+                output = self.convert_symbol(major.upper())
+            else:
+                output = major.upper()
 
         elif major.lower() in self.majors.keys():
-            output = self.convert_symbol(self.majors[major.lower()])
+            if conv_symbol:
+                output = self.convert_symbol(self.majors[major.lower()])
+            else:
+                output = self.majors[major.lower()]
 
         else:
             raise ValueError("Subject area not found")
@@ -67,44 +88,48 @@ class Parser:
         page_html = bs4.BeautifulSoup(raw.text, "html.parser")
         courses_html = page_html.find_all(class_="media-body")
         # print(courses_html[1])
-        course_list = []
-
-        num2word = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9,
-                    "ten": 10}
-
-        regex_dict = {"Seminar": "(?<=Seminar, )[a-z]+(?= hour)",
-                      "Lecture": "(?<=Lecture, )[a-z]+(?= hour)",
-                      "Outside study": "(?<=outside study, )[a-z]+(?= hour)",
-                      "Laboratory": "(?<=(?:L|l)aboratory, )[a-z]+(?= hour)",
-                      "Discussion": "(?<=discussion, )[a-z]+(?= hour)",
-                      "Studio": "(?<=Studio, )[a-z]+(?= hour)"
-                      }
+        self.course_list = []
 
         for course in courses_html:
-            course_dict = {"Number": re.search("[A-Z]*[0-9]+[A-Z]*", course.get_text()).group(0),
-                           "Name": re.search("(?<=. )[A-Za-z ]+", course.get_text()).group(0),
-                           "Units": re.search("(?<=Units: )[1-9]+", course.get_text()).group(0),
+            course_dict = {"Area": self.major_abbrev(major, conv_symbol=False),
+                           "Number": "",
+                           "Name": "",
+                           "Units": "",
                            "Seminar": 0,
                            "Lecture": 0,
                            "Outside study": 0,
                            "Laboratory": 0,
                            "Discussion": 0,
                            "Studio": 0,
-                           "Description": re.search("(?<=[a-z]\. )[A-Z].+", course.get_text()).group(0)
+                           "Description": ""
                            }
 
-            for keys, values in regex_dict.items():
-                if re.search(values, course.get_text()):
-                    course_dict.update({keys: num2word[re.search(values, course.get_text()).group(0)]})
+            for key, value in regex_dict.items():
+                if re.search(value, course.get_text()):
+                    if re.search(value, course.get_text()).group(0) in num2word:
+                        course_dict.update({key: num2word[re.search(value, course.get_text()).group(0)]})
+                    else:
+                        course_dict.update({key: re.search(value, course.get_text()).group(0)})
 
             if re.search("(?<=Lecture\/demonstration, )[a-z]+(?= hour)", course.get_text()):
                 course_dict.update({"Lecture": num2word[re.search("(?<=Lecture\/demonstration, )[a-z]+(?= hour)",
                                                                   course.get_text()).group(0)]})
 
-            course_list.append(course_dict)
+            self.course_list.append(course_dict)
 
-        print(course_list)
+        # print(self.course_list)
+
+    def get_course(self, input_key, input_value):
+        "Returns a list of courses matching the user's input key and value"
+        course_match = []
+        for course in self.course_list:
+            for key in course:
+                if key.lower() == input_key.lower() and re.search(str(input_value).lower(), str(course[key]).lower()):
+                    course_match.append(course)
+        return course_match
+
 
 
 parser = Parser()
 parser.parse_courses("bioengineering")
+print(parser.get_course("Units", "5"))

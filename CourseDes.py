@@ -1,5 +1,4 @@
 import webbrowser
-import re
 import DesParse
 from tkinter import *
 
