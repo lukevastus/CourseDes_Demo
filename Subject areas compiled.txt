@@ -1,0 +1,183 @@
+aerospace studies: AERO ST
+african american studies: AF AMER
+african studies: AFRC ST
+american indian studies: AM IND
+anesthesiology: ANES
+anthropology: ANTHRO
+applied linguistics: APPLING
+archaeology: ARCHEOL
+architecture and urban design: ARCH&UD
+art: ART
+art history: ART HIS
+arts and architecture: ART&ARC
+asian american studies: ASIA AM
+asian: ASIAN
+chinese: CHIN
+filipino: FILIPNO
+hindi-urdu: HIN-URD
+indonesian: INDO
+japanese: JAPAN
+korean: KOREA
+south asian: S ASIAN
+southeast asian: SEASIAN
+thai: THAI
+vietnamese: VIETMSE
+atmospheric and oceanic sciences: A&O SCI
+bioengineering: BIOENGR
+bioinformatics: BIOINFO
+biological chemistry: BIOL CH
+biomathematics: BIOMATH
+biomedical research: BMD RES
+biostatistics: BIOSTAT
+chemical engineering: CH ENGR
+chemistry and biochemistry: CHEM
+chicana and chicano studies: CHICANO
+civil and environmental engineering: C&EE
+classics: CLASSIC
+greek: GREEK
+latin: LATIN
+communication studies: COMM ST
+community health sciences: COM HLT
+comparative literature: COM LIT
+computational and systems biology: C&S BIO
+bioinformatics (undergraduate): BIOINFR
+computer science: COM SCI
+conservation of archaeological and ethnographic materials: CAEM
+dentistry: DENT
+oral biology: ORL BIO
+design | media arts: DESMA
+digital humanities: DGT HUM
+disability studies: DIS STD
+earth, planetary, and space sciences: EPS SCI
+east asian studies: EA STDS
+ecology and evolutionary biology: EE BIOL
+economics: ECON
+education: EDUC
+electrical engineering: EL ENGR
+engineering: ENGR
+english: ENGL
+environment: ENVIRON
+environmental health sciences: ENV HLT
+epidemiology: EPIDEM
+family medicine: FAM MED
+film and television: FILM TV
+food studies: FOOD ST
+french: FRNCH
+gender studies: GENDER
+general education clusters: GE CLST
+geography: GEOG
+afrikaans: AFRKAAN
+dutch: DUTCH
+german: GERMAN
+yiddish: YIDDSH
+gerontology: GRNTLGY
+global health: GLB HLT
+global studies: GLBL ST
+health policy and management: HLT POL
+history: HIST
+honors collegium: HNRS
+human genetics: HUM GEN
+indo-european studies: I E STD
+information studies: INF STD
+physiological science: PHYSCI
+international and area studies: I A STD
+international development studies: INTL DV
+italian: ITALIAN
+labor and workplace studies: LBR&WS
+latin american studies: LATN AM
+undergraduate law: UG-LAW
+lesbian, gay, bisexual, and transgender studies (pre-16f): LGBTS
+lesbian, gay, bisexual, transgender, and queer studies: LGBTQS
+life sciences: LIFESCI
+american sign language: ASL
+linguistics: LING
+swahili: SWAHILI
+international exchange program: IEP
+management: MGMT
+materials science and engineering: MAT SCI
+mathematics: MATH
+program in computing: COMPTNG
+medicine: MED
+microbiology, immunology, and molecular genetics: MIMG
+military science: MIL SCI
+molecular and medical pharmacology: M PHARM
+molecular biology: MOL BIO
+molecular toxicology: MOL TOX
+molecular, cell, and developmental biology: MCD BIO
+molecular, cellular, and integrative physiology: MC&IP
+music (pre-16f): MUSIC
+music: MUSC   
+music industry: MSC IND
+music history (pre-16f): MUS HST
+music history: MSC HST
+musicology: MUSCLG
+naval science: NAV SCI
+ancient near east: AN N EA
+arabic: ARABIC
+armenian: ARMENIA
+hebrew: HEBREW
+iranian: IRANIAN
+islamic studies: ISLM ST
+jewish studies: JEWISH
+middle eastern studies: M E STD
+near eastern languages: NR EAST
+semitic: SEMITIC
+turkic languages: TURKIC
+medical history: MED HIS
+neurobiology: NEURBIO
+neurology: NEURLGY
+neuroscience (graduate): NEURO
+neurosurgery: NEURSGY
+nursing: NURSING
+obstetrics and gynecology: OBGYN
+ophthalmology: OPTH
+orthopaedic surgery: ORTHPDC
+pathology and laboratory medicine: PATH
+pediatrics: PEDS
+philosophy: PHILOS
+astronomy: ASTR
+physics: PHYSICS
+physics and biology in medicine: PBMED
+physiology: PHYSIOL
+political science: POL SCI
+psychiatry and biobehavioral sciences: PSYCTRY
+psychology: PSYCH
+public health: PUB HLT
+public policy: PUB PLC
+radiation oncology: RAD ONC
+scandinavian: SCAND
+science education: SCI EDU
+bulgarian: BULGR
+central and east european studies: C&EE ST
+czech: CZCH
+hungarian: HNGAR
+lithuanian: LTHUAN
+polish: POLSH
+romanian: ROMANIA
+russian: RUSSN
+serbian/croatian: SRB CRO
+slavic: SLAVC
+ukrainian: UKRN
+social science: SOC SC
+social thought: SOC THT
+social welfare: SOC WLF
+society and genetics: SOC GEN
+sociology: SOCIOL
+indigenous languages of the americas: IL AMER
+portuguese: PORTGSE
+spanish: SPAN
+statistics: STATS
+summer sessions: SUMMER
+surgery: SURGERY
+theater: THEATER
+university studies: UNIV ST
+urban planning: URBN PL
+urology: UROLOGY
+arts education: ARTS ED
+dance: DANCE
+world arts and cultures: WL ARTS
+english as a second language: ESL
+english composition: ENGCOMP
+religion, study of: RELIGN
+neuroscience: NEUROSC
+mechanical and aerospace engineering: MECH&AE
