@@ -25,11 +25,12 @@ class Parser:
 
     """
     def __init__(self):
-        """Generates a dictionary consisting of all UCLA undergraduate majors and their abbreviations"""
+        """Generates a dictionary (self.majors) consisting of all UCLA undergraduate majors and their abbreviations"""
         with open("Majors.txt", "r") as myfile:
             text = myfile.readlines()
 
         self.majors = {}
+        self.course_list = []
 
         for line in text:
             name = re.search("(?<=\t)[A-Z][a-z]+"
@@ -71,7 +72,7 @@ class Parser:
                 output = self.majors[major.lower()]
 
         else:
-            raise ValueError("Subject area not found")
+            raise ValueError("Major not found")
 
         return output
 
@@ -81,14 +82,14 @@ class Parser:
                         self.major_abbrev(major) + "&funsel=3")
 
     def parse_courses(self, major):
-        """Parses course descriptions of major and generates a list of dictionaries, each of which stands for
-        a course"""
+        """Parses course descriptions of major and writes to a list of dictionaries (self.course_list),
+        each of which stands for a course"""
+
         raw = requests.get("http://www.registrar.ucla.edu/Academics/Course-Descriptions/Course-Details?SA=" +
                         self.major_abbrev(major) + "&funsel=3")
         page_html = bs4.BeautifulSoup(raw.text, "html.parser")
         courses_html = page_html.find_all(class_="media-body")
         # print(courses_html[1])
-        self.course_list = []
 
         for course in courses_html:
             course_dict = {"Area": self.major_abbrev(major, conv_symbol=False),
@@ -116,20 +117,42 @@ class Parser:
                                                                   course.get_text()).group(0)]})
 
             self.course_list.append(course_dict)
-
         # print(self.course_list)
 
-    def get_course(self, input_key, input_value):
-        "Returns a list of courses matching the user's input key and value"
+    def parse_all_courses(self):
+        for key in self.majors:
+            self.parse_courses(key)
+            print("Parsed:" + key)
+
+    def get_course(self, input_value, input_key="Name", major="All"):
+        """Returns a list of courses matching the user's keywords.
+           input_value: a string, the user's keyword to be matched
+           input_key: categorizing the input_value: is it part of the "Name", the "Description", or something else?
+           major: the majors to which the user's desired courses belong. Can be a string or a list.
+        """
         course_match = []
+        if major == "All":
+            self.parse_all_courses()
+        else:
+            if isinstance(major, str):
+                self.parse_courses(major)
+            elif isinstance(major, list):
+                for item in major:
+                    self.parse_courses(item)
+            else:
+                raise TypeError("major must be a string or list of strings")
+
         for course in self.course_list:
             for key in course:
                 if key.lower() == input_key.lower() and re.search(str(input_value).lower(), str(course[key]).lower()):
                     course_match.append(course)
         return course_match
 
-
-
+major_list = ["bioengineering", "mechanical and aerospace engineering", "computer science", "electrical engineering"]
 parser = Parser()
-parser.parse_courses("bioengineering")
-print(parser.get_course("Units", "5"))
+print(parser.get_course("programming", input_key="description", major=major_list))
+
+
+#parser = Parser()
+#parser.parse_all_courses()
+#print(parser.get_course("Name", "programming"))
