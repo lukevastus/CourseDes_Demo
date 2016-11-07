@@ -9,15 +9,14 @@ num2word = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "sev
 regex_dict = {"Number": "[A-Z]*[0-9]+[A-Z]*",
               "Name": "(?<=. )[A-Za-z1-9\- ]+",
               "Units": "(?<=Units: )[1-9]+",
-              "Description": "(?<=[a-z]\. )[A-Z].+",
               "Seminar": "(?<=Seminar, )[a-z]+(?= hour)",
               "Lecture": "(?<=Lecture, )[a-z]+(?= hour)",
               "Outside study": "(?<=outside study, )[a-z]+(?= hour)",
               "Laboratory": "(?<=(?:L|l)aboratory, )[a-z]+(?= hour)",
               "Discussion": "(?<=discussion, )[a-z]+(?= hour)",
-              "Studio": "(?<=Studio, )[a-z]+(?= hour)"
+              "Studio": "(?<=Studio, )[a-z]+(?= hour)",
+              "Description": "(?<=[a-z]\. )[A-Z].+"
               }
-
 
 class Parser:
     """
@@ -85,6 +84,8 @@ class Parser:
         """Parses course descriptions of major and writes to a list of dictionaries (self.course_list),
         each of which stands for a course"""
 
+        self.course_list = []
+
         raw = requests.get("http://www.registrar.ucla.edu/Academics/Course-Descriptions/Course-Details?SA=" +
                         self.major_abbrev(major) + "&funsel=3")
         page_html = bs4.BeautifulSoup(raw.text, "html.parser")
@@ -124,7 +125,7 @@ class Parser:
             self.parse_courses(key)
             print("Parsed:" + key)
 
-    def get_course(self, input_value, input_key="Name", major="All"):
+    def get_course(self, input_value="All", input_key="Name", major="All"):
         """Returns a list of courses matching the user's keywords.
            input_value: a string, the user's keyword to be matched
            input_key: categorizing the input_value: is it part of the "Name", the "Description", or something else?
@@ -142,16 +143,30 @@ class Parser:
             else:
                 raise TypeError("major must be a string or list of strings")
 
-        for course in self.course_list:
-            for key in course:
-                if key.lower() == input_key.lower() and re.search(str(input_value).lower(), str(course[key]).lower()):
-                    course_match.append(course)
+        if input_value == "All":
+            return self.course_list
+        else:
+            for course in self.course_list:
+                for key in course:
+                    if key.lower() == input_key.lower() and re.search(str(input_value).lower(), str(course[key]).lower()):
+                        course_match.append(course)
         return course_match
 
-major_list = ["bioengineering", "mechanical and aerospace engineering", "computer science", "electrical engineering"]
-parser = Parser()
-print(parser.get_course("programming", input_key="description", major=major_list))
+    def print_course(self, courses):
+        if isinstance(courses, list):
+            for course in courses:
+                for key in course:
+                    print(key + ":" + str(course[key]) + "\n")
+                print("\n")
+        elif isinstance(courses, dict):
+            for key in courses:
+                print(key + ":" + str(courses[key]) + "\n")
 
+
+
+"""major_list = ["bioengineering", "mechanical and aerospace engineering", "computer science", "electrical engineering"]
+parser = Parser()
+parser.print_course(parser.get_course("programming", input_key="description", major=major_list))"""
 
 #parser = Parser()
 #parser.parse_all_courses()
