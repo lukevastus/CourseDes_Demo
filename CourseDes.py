@@ -18,7 +18,6 @@ class App:
         major_entry = Entry(self.master)
         major_entry.pack()
 
-
         course_keyword_label = Label(self.master, text="Enter keyword you want to search for:")
         course_keyword_label.pack()
 

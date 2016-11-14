@@ -7,7 +7,7 @@ num2word = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "sev
             "ten": 10}
 
 regex_dict = {"Number": "[A-Z]*[0-9]+[A-Z]*",
-              "Name": "(?<=. )[A-Za-z1-9\- ]+",
+              "Name": "(?<=. )[A-Za-z1-9\-. ]+",
               "Units": "(?<=Units: )[1-9]+",
               "Seminar": "(?<=Seminar, )[a-z]+(?= hour)",
               "Lecture": "(?<=Lecture, )[a-z]+(?= hour)",
@@ -17,6 +17,7 @@ regex_dict = {"Number": "[A-Z]*[0-9]+[A-Z]*",
               "Studio": "(?<=Studio, )[a-z]+(?= hour)",
               "Description": "(?<=[a-z]\. )[A-Z].+"
               }
+
 
 class Parser:
     """
@@ -84,8 +85,6 @@ class Parser:
         """Parses course descriptions of major and writes to a list of dictionaries (self.course_list),
         each of which stands for a course"""
 
-        self.course_list = []
-
         raw = requests.get("http://www.registrar.ucla.edu/Academics/Course-Descriptions/Course-Details?SA=" +
                         self.major_abbrev(major) + "&funsel=3")
         page_html = bs4.BeautifulSoup(raw.text, "html.parser")
@@ -125,13 +124,16 @@ class Parser:
             self.parse_courses(key)
             print("Parsed:" + key)
 
+
     def get_course(self, input_value="All", input_key="Name", major="All"):
         """Returns a list of courses matching the user's keywords.
            input_value: a string, the user's keyword to be matched
            input_key: categorizing the input_value: is it part of the "Name", the "Description", or something else?
            major: the majors to which the user's desired courses belong. Can be a string or a list.
         """
+        self.course_list = []
         course_match = []
+
         if major == "All":
             self.parse_all_courses()
         else:
@@ -153,6 +155,8 @@ class Parser:
         return course_match
 
     def print_course(self, courses):
+        if len(courses) == 0:
+            print("No matches found.")
         if isinstance(courses, list):
             for course in courses:
                 for key in course:
